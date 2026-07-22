@@ -1,5 +1,5 @@
 chromadb
-google-generativeai
+google-genai
 groq
 gradio
 python-dotenv
