@@ -1,0 +1,17 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/venv_fixed/Scripts/python.exe",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/venv_fixed/Lib/site-packages"
+    ],
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.venvPath": "${workspaceFolder}",
+    "python.analysis.venv": "venv_fixed",
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "none",
+        "reportMissingModuleSource": "none",
+        "reportMissingTypeStubs": "none"
+    }
+}
+

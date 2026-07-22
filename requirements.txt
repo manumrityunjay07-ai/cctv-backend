@@ -1,0 +1,12 @@
+chromadb
+google-generativeai
+groq
+gradio
+python-dotenv
+fastapi
+uvicorn
+python-multipart
+numpy
+redis
+pillow
+aiofiles

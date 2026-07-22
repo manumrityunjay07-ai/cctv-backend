@@ -1,0 +1,13 @@
+{
+  "venvPath": ".",
+  "venv": "venv_fixed",
+  "pythonVersion": "3.12",
+  "pythonPlatform": "Windows",
+  "include": ["src"],
+  "extraPaths": [
+    "venv_fixed/Lib/site-packages"
+  ],
+  "reportMissingModuleSource": "none",
+  "reportMissingImports": "none",
+  "reportMissingTypeStubs": "none"
+}

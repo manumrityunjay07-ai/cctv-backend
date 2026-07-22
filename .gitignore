@@ -1,0 +1,23 @@
+# Environments
+venv/
+venv_fixed/
+venv_new/
+.env
+
+# Model Weights
+*.pt
+*.onnx
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data & Temp files
+data/
+temp_frame.jpg
+tools/
+
+# OS
+.DS_Store
+Thumbs.db
