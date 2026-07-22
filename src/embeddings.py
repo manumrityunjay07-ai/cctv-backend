@@ -22,7 +22,7 @@ class EventIndexer:
     def generate_embedding(self, text):
         """Generate embedding for text using Google Gemini."""
         result = self.client.models.embed_content(
-            model="gemini-embedding-2",
+            model="text-embedding-004",
             contents=text,
             config=types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT")
         )
@@ -46,7 +46,7 @@ class EventIndexer:
         """Search the index for relevant events based on a natural language query."""
         # Note: task_type="retrieval_query" is optimal for the search query
         result = self.client.models.embed_content(
-            model="gemini-embedding-2",
+            model="text-embedding-004",
             contents=query,
             config=types.EmbedContentConfig(task_type="RETRIEVAL_QUERY")
         )
