@@ -279,7 +279,7 @@ def search_api(query: str):
         meta = res["metadata"]
         doc = res["document"]
         video_filename = meta.get("video_filename", "")
-        clipUrl = f"http://localhost:8000/videos/{video_filename}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
+        clipUrl = f"/videos/{video_filename}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
         final_results.append({
             "id": res["id"],
             "summary": doc,
@@ -332,7 +332,7 @@ def search_by_person_api(person_id: str):
     for i in range(len(ids)):
         meta = metas[i]
         video_filename = meta.get("video_filename", "")
-        clipUrl = f"http://localhost:8000/videos/{video_filename}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
+        clipUrl = f"/videos/{video_filename}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
         final_results.append({
             "id": ids[i],
             "summary": docs[i],

@@ -388,16 +388,7 @@ function App() {
                               Risk: {result.riskScore} {result.riskScore >= 80 ? '⚠️' : ''}
                             </span>
                             <div className="event-actions">
-                              {result.metadata && result.metadata.person_id && (
-                                <>
-                                  <button className="btn-icon" onClick={() => viewTimeline(result.metadata.person_id)} title="View Timeline">
-                                    🕐 Timeline
-                                  </button>
-                                  <button className="btn-icon" onClick={() => fetchBestPhoto(result.metadata.person_id)} title="High-Res Snapshot">
-                                    📸 Snapshot
-                                  </button>
-                                </>
-                              )}
+                              {/* Cloud mode: Timeline and Snapshot disabled */}
                             </div>
                           </div>
                           <p className="event-summary-text">{result.summary}</p>
