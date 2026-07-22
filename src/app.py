@@ -60,8 +60,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import subprocess
 app.mount("/videos", StaticFiles(directory=RAW_VIDEOS_DIR), name="videos")
-
+os.makedirs("data/snapshots", exist_ok=True)
+app.mount("/snapshots", StaticFiles(directory="data/snapshots"), name="snapshots")
 # We use the cloud now
 indexer = None
 search_engine = None
@@ -341,3 +343,36 @@ def search_by_person_api(person_id: str):
             "metadata": meta
         })
     return {"results": final_results}
+
+@app.get("/api/best_photo")
+def get_best_photo(person_id: str):
+    if indexer is None:
+        return {"ok": False, "reason": "Not initialized"}
+    
+    # Try to find which video this person was in by searching for their events
+    results = indexer.search_by_person(str(person_id))
+    metas = results.get("metadatas", []) or []
+    if not metas:
+        return {"ok": False, "reason": "Person not found"}
+        
+    video_filename = metas[0].get("video_filename", "")
+    if not video_filename:
+        return {"ok": False, "reason": "Video not found"}
+        
+    video_path = os.path.join(RAW_VIDEOS_DIR, video_filename)
+    if not os.path.exists(video_path):
+        return {"ok": False, "reason": "Video file missing"}
+        
+    snapshot_filename = f"snapshot_{person_id}.jpg"
+    snapshot_path = os.path.join("data/snapshots", snapshot_filename)
+    
+    # Extract a frame using ffmpeg at 2 seconds in (simulating a good face capture)
+    try:
+        subprocess.run([
+            "ffmpeg", "-y", "-i", video_path, 
+            "-ss", "00:00:02", "-vframes", "1", snapshot_path
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        return {"ok": True, "photo": f"/snapshots/{snapshot_filename}"}
+    except Exception as e:
+        logger.error(f"Snapshot extraction failed: {e}")
+        return {"ok": False, "reason": "Extraction failed"}

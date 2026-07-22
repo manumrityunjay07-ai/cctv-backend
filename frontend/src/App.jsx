@@ -121,7 +121,7 @@ function App() {
       if (data.results) {
         setSearchResults(data.results.map(r => ({
           ...r,
-          clipUrl: videoUrl || "https://www.w3schools.com/html/mov_bbb.mp4"
+          clipUrl: r.clipUrl || videoUrl || "https://www.w3schools.com/html/mov_bbb.mp4"
         })));
         if (data.answer) {
           setSearchAnswer(data.answer);
@@ -388,7 +388,13 @@ function App() {
                               Risk: {result.riskScore} {result.riskScore >= 80 ? '⚠️' : ''}
                             </span>
                             <div className="event-actions">
-                              {/* Cloud mode: Timeline and Snapshot disabled */}
+                              {result.metadata && result.metadata.person_id && (
+                                <>
+                                  <button className="btn-icon" onClick={() => fetchBestPhoto(result.metadata.person_id)} title="High-Res Snapshot">
+                                    📸 Face Snapshot
+                                  </button>
+                                </>
+                              )}
                             </div>
                           </div>
                           <p className="event-summary-text">{result.summary}</p>
