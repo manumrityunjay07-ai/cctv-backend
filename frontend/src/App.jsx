@@ -174,13 +174,8 @@ function App() {
 
   async function fetchBestPhoto(personId) {
     try {
-      const r = await fetch(`/api/best_photo?person_id=${encodeURIComponent(personId)}`)
-      const d = await r.json()
-      if (d.ok) {
-        window.open(`${d.photo}`, '_blank')
-      } else {
-        alert('No best photo: ' + (d.reason || 'none'))
-      }
+      const backend_url = "https://cctv-backend-seod.onrender.com"
+      window.open(`${backend_url}/api/best_photo?person_id=${encodeURIComponent(personId)}`, '_blank')
     } catch (e) {
       console.error(e)
       alert('Error fetching best photo')
@@ -376,11 +371,6 @@ function App() {
                       <div key={result.id} className={`event-card ${result.riskScore >= 80 ? 'risk-high' : ''}`}>
                         <div className="event-media">
                           <video src={result.clipUrl} controls muted className="event-video"></video>
-                          {result.snapshot && (
-                            <div className="event-snapshot-wrapper">
-                              <img src={result.snapshot} alt="snapshot" className="event-snapshot" />
-                            </div>
-                          )}
                         </div>
                         <div className="event-details">
                           <div className="event-header-row">
@@ -388,7 +378,11 @@ function App() {
                               Risk: {result.riskScore} {result.riskScore >= 80 ? '⚠️' : ''}
                             </span>
                             <div className="event-actions">
-                              {/* Cloud mode: Snapshot renders automatically */}
+                              {result.metadata && result.metadata.person_id && (
+                                <button className="btn-icon" onClick={() => fetchBestPhoto(result.metadata.person_id)} title="High-Res Snapshot">
+                                  📸 Face Snapshot
+                                </button>
+                              )}
                             </div>
                           </div>
                           <p className="event-summary-text">{result.summary}</p>
