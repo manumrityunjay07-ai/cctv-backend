@@ -7,6 +7,8 @@ import datetime
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from urllib.parse import quote
 from dotenv import load_dotenv
 from google import genai
 import time
@@ -281,11 +283,17 @@ def search_api(query: str):
         meta = res["metadata"]
         doc = res["document"]
         video_filename = meta.get("video_filename", "")
-        clipUrl = f"/videos/{video_filename}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
+        clipUrl = f"/videos/{quote(video_filename)}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
+        
+        # Inject snapshot URL directly so it shows up next to the video in the UI
+        person_id = meta.get("person_id", "")
+        snapshot_url = f"/api/best_photo?person_id={person_id}" if person_id else None
+        
         final_results.append({
             "id": res["id"],
             "summary": doc,
             "clipUrl": clipUrl,
+            "snapshot": snapshot_url,
             "riskScore": meta.get("risk_score", 0),
             "metadata": meta
         })
@@ -334,11 +342,16 @@ def search_by_person_api(person_id: str):
     for i in range(len(ids)):
         meta = metas[i]
         video_filename = meta.get("video_filename", "")
-        clipUrl = f"/videos/{video_filename}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
+        clipUrl = f"/videos/{quote(video_filename)}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
+        
+        person_id = meta.get("person_id", "")
+        snapshot_url = f"/api/best_photo?person_id={person_id}" if person_id else None
+        
         final_results.append({
             "id": ids[i],
             "summary": docs[i],
             "clipUrl": clipUrl,
+            "snapshot": snapshot_url,
             "riskScore": meta.get("risk_score", 0),
             "metadata": meta
         })
@@ -368,11 +381,12 @@ def get_best_photo(person_id: str):
     
     # Extract a frame using ffmpeg at 2 seconds in (simulating a good face capture)
     try:
-        subprocess.run([
-            "ffmpeg", "-y", "-i", video_path, 
-            "-ss", "00:00:02", "-vframes", "1", snapshot_path
-        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-        return {"ok": True, "photo": f"/snapshots/{snapshot_filename}"}
+        if not os.path.exists(snapshot_path):
+            subprocess.run([
+                "ffmpeg", "-y", "-i", video_path, 
+                "-ss", "00:00:02", "-vframes", "1", snapshot_path
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        return FileResponse(snapshot_path)
     except Exception as e:
         logger.error(f"Snapshot extraction failed: {e}")
         return {"ok": False, "reason": "Extraction failed"}
