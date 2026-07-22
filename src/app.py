@@ -283,11 +283,12 @@ def search_api(query: str):
         meta = res["metadata"]
         doc = res["document"]
         video_filename = meta.get("video_filename", "")
-        clipUrl = f"/videos/{quote(video_filename)}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
+        backend_url = "https://cctv-backend-seod.onrender.com"
+        clipUrl = f"{backend_url}/videos/{quote(video_filename)}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
         
         # Inject snapshot URL directly so it shows up next to the video in the UI
         person_id = meta.get("person_id", "")
-        snapshot_url = f"/api/best_photo?person_id={person_id}" if person_id else None
+        snapshot_url = f"{backend_url}/api/best_photo?person_id={person_id}" if person_id else None
         
         final_results.append({
             "id": res["id"],
@@ -342,10 +343,11 @@ def search_by_person_api(person_id: str):
     for i in range(len(ids)):
         meta = metas[i]
         video_filename = meta.get("video_filename", "")
-        clipUrl = f"/videos/{quote(video_filename)}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
+        backend_url = "https://cctv-backend-seod.onrender.com"
+        clipUrl = f"{backend_url}/videos/{quote(video_filename)}" if video_filename else "https://www.w3schools.com/html/mov_bbb.mp4"
         
         person_id = meta.get("person_id", "")
-        snapshot_url = f"/api/best_photo?person_id={person_id}" if person_id else None
+        snapshot_url = f"{backend_url}/api/best_photo?person_id={person_id}" if person_id else None
         
         final_results.append({
             "id": ids[i],

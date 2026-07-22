@@ -388,13 +388,7 @@ function App() {
                               Risk: {result.riskScore} {result.riskScore >= 80 ? '⚠️' : ''}
                             </span>
                             <div className="event-actions">
-                              {result.metadata && result.metadata.person_id && (
-                                <>
-                                  <button className="btn-icon" onClick={() => fetchBestPhoto(result.metadata.person_id)} title="High-Res Snapshot">
-                                    📸 Face Snapshot
-                                  </button>
-                                </>
-                              )}
+                              {/* Cloud mode: Snapshot renders automatically */}
                             </div>
                           </div>
                           <p className="event-summary-text">{result.summary}</p>
