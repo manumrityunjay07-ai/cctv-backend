@@ -214,7 +214,7 @@ def upload_and_process(file: UploadFile = File(...)):
         
         def generate_content():
             return client.models.generate_content(
-                model='gemini-flash-latest',
+                model='gemini-2.5-flash',
                 contents=[prompt, video_file]
             )
         
