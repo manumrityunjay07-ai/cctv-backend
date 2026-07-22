@@ -162,7 +162,7 @@ class NLSearchEngine:
         elif self.provider == "gemini":
             try:
                 response = self.gemini_client.models.generate_content(
-                    model='gemini-3.5-flash',
+                    model='gemini-flash-latest',
                     contents=prompt
                 )
                 return response.text
