@@ -384,11 +384,11 @@ def get_best_photo(person_id: str):
     # Extract a frame using ffmpeg at 2 seconds in (simulating a good face capture)
     try:
         if not os.path.exists(snapshot_path):
-            # Put -ss BEFORE -i for fast seeking so it doesn't decode the whole video and OOM
+            # Increase timeout to 45 seconds because Render free tier CPU is extremely slow (0.1 CPU)
             subprocess.run([
                 "ffmpeg", "-y", "-ss", "00:00:02", "-i", video_path, 
                 "-vframes", "1", "-q:v", "2", snapshot_path
-            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True, timeout=10)
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True, timeout=45)
         
         if os.path.exists(snapshot_path):
             return FileResponse(snapshot_path, media_type="image/jpeg")
