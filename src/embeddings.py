@@ -14,7 +14,7 @@ class EventIndexer:
         # Configure Gemini API
         api_key = os.getenv("GOOGLE_API_KEY")
         if api_key and api_key != "your_gemini_api_key_here":
-            self.model_name = "gemini-2.0-flash"
+            self.model_name = "gemini-3.5-flash"
             self.client = genai.Client(api_key=api_key)
         else:
             self.client = None
